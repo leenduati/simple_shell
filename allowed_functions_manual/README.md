@@ -64,3 +64,84 @@ For example, it does not execute functions registered with atexit.
 Return Value: The _Exit() function returns nothing.
 
 7. fflush
+
+fflush() is typically used for output stream only. Its purpose is to clear (or flush) the output buffer and move the buffered data to console (in case of stdout) or disk (in case of file output stream)
+
+8. fork
+
+fork is a system call used to ceate a new prcoess, which runs concurrently with the process that makes the original call
+ A child process uses the same pc(program counter), same CPU registers, same open files which use in the parent process
+ It takes no parameters and returns an integer value
+ Negative Value: creation of a child process was unsuccessful.
+Zero: Returned to the newly created child process.
+Positive value: Returned to parent or caller. The value contains process ID of newly created child process.
+Example:
+`#include <stdio.h>`
+`#include <sys/types.h>`
+`#include <unistd.h>`
+`int main()`
+`{`
+  
+    `// make two process which run same`
+    `// program after this instruction`
+    `fork();`
+  
+    `printf("Hello world!\n");`
+    `return 0;`
+`}`
+
+Output
+`Hello world!`
+`Hello world!`
+
+Example
+`#include <stdio.h>`
+`#include <sys/types.h>`
+`int main()`
+`{`
+    `fork();`
+    `fork();`
+    `fork();`
+    `printf("hello\n");`
+    `return 0;`
+`}`
+
+Output
+
+*NB: The fork system call creates a new process.*
+*The new process created by fork() is a copy of the current process except for the returned value.*
+*The exec() system call replaces the current process with a new program.*
+
+9. free / malloc
+
+“malloc” or “memory allocation” method in C is used to dynamically allocate a single large block of memory with the specified size.
+ It returns a pointer of type void which can be cast into a pointer of any form. 
+ It doesn’t Initialize memory at execution time so that it has initialized each block with the default garbage value initially. 
+`ptr = (int*) malloc(100 * sizeof(int));`
+“calloc” or “contiguous allocation” method in C is used to dynamically allocate the specified number of blocks of memory of the specified type. it is very much similar to malloc() but has two different points and these are:
+It initializes each block with a default value ‘0’.
+It has two parameters or arguments as compare to malloc().
+`ptr = (float*) calloc(25, sizeof(float));`
+This statement allocates contiguous space in memory for 25 elements each with the size of the float.
+“free” method in C is used to dynamically de-allocate the memory. 
+The memory allocated using functions malloc() and calloc() is not de-allocated on their own
+
+10. getcwd
+`#define _POSIX_SOURCE`
+`#include <unistd.h>`
+
+`char *getcwd(char *buffer, size_t size);`
+Determines the path name of the working directory and stores it in buffer.
+size - The number of characters in the buffer area.
+buffer- The name of the buffer that will be used to hold the path name of the working directory. buffer must be big enough to hold the working directory name, plus a terminating NULL to mark the end of the name.
+Returned value
+If successful, getcwd() returns a pointer to the buffer, else a NULL pointer
+
+11. getline
+The latest and most trendy function for reading a string of text is getline().
+`getline(&buffer,&size,stdin);`
+&buffer is the address of the first character position where the input string will be stored. It’s not the base address of the buffer, but of the first character in the buffer
+&size is the address of the variable that holds the size of the input buffer, another pointer.
+stdin is the input file handle. So you could use getline() to read a line of text from a file, but when stdin is specified, standard input is read.
+
+12. getpid
